@@ -5,7 +5,7 @@
 ```diff
 - You must install nodejs ro run the project
 ```
-## nodejs commands
+## npm commands
 ```
  npm install
  npm start
