@@ -62,8 +62,6 @@ controllers.app_controller = ($scope) => {
             } else {
                 $scope.initial = $scope.to_edit.name;
             }
-        } else {
-            //nothing to do
         }
         $scope.states[$scope.states.indexOf($scope.to_edit)].initial = $scope.to_edit.initial;
         $scope.dispose_edit();
