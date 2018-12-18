@@ -41,7 +41,7 @@ controllers.app_controller = ($scope) => {
     };
     $scope.set_alphabet = (alphabet) => {
         alphabet = (alphabet != undefined) ? alphabet.split(",") : [];
-        alphabet.filter(a=>alphabet.filter(x=>x==a).length >1).splice(1,1).map(i=>alphabet.splice(alphabet.indexOf(i),1));
+            alphabet.filter(a=>alphabet.filter(x=>x==a).length >1).map(i=>{if(alphabet.filter(x=>x==i).length>1)alphabet.splice(alphabet.indexOf(i),1);});
         if (alphabet.length > 1) {
             $scope.symbols = alphabet;
             $scope.states.map(state => state.paths = []);
