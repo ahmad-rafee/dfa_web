@@ -1,0 +1,15 @@
+{
+  "name": "dfa_web",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "node main.js",
+    "start":"node main.js"
+  },
+  "author": "Abu Saqer + ABU JAMEEL",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.4"
+  }
+}

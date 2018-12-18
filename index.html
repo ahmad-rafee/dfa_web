@@ -1,0 +1,237 @@
+<html>
+
+<head>
+
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+
+</head>
+
+<body data-ng-app="dfa_web">
+    <div class="container pw" data-ng-controller="app_controller">
+        <div class="row">
+            <div class="bg-info text-light col-md-12 page-header ">
+                <strong>
+                DFA SIMULATION PROJECT <br>
+                Programmed By : Ahmed Rafie - Mohammad Alkhaldi
+            </strong>
+            </div>
+        </div>
+        <div class="row" style="padding:20px;">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+                <div>
+                    <button class="btn btn-info" data-ng-click="new_set()">New</button>
+                    <button class="btn btn-info" data-toggle="modal" data-target="#load_file">Load</button>
+                    <button class="btn btn-info" ng-click="save()">Save</button>
+                </div>
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+        <div class="row">
+
+
+            <div class="col-md-8">
+                <table class="table table-bordered col-md-12" ng-if="states.length>0">
+                    <tr class="bg-info text-light">
+                        <th>
+                            State
+
+                        </th>
+                        <th>
+                            Actions
+                        </th>
+                    </tr>
+                    <tr data-ng-repeat="state in states">
+                        <td>
+                            {{state.name}}
+                        </td>
+                        <td>
+                            <span title="View State Details" data-ng-click="view_details(state.name)" style="cursor:pointer;padding:5px;" data-toggle="modal">
+                            <i class="fas fa-eye"></i>
+                        </span>
+                            <span title="Edit State Details" data-ng-click="edit_details(state.name)" style="cursor:pointer;padding:5px;">
+                                <i class="fas fa-edit"></i>
+                        </span>
+                            <span title="Remove State" data-ng-click="remove_state(state.name)" style="cursor:pointer;padding:5px;">
+                                <i class="fas fa-trash-alt"></i>
+                        </span>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <button class="btn btn-info" ng-click="add_state(state_name)">Add State</button>
+                    <input type="text" ng-model="state_name" placeholder="Enter State Name" class="form-control">
+                    <div id="add_op">
+                        <div></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-info" data-ng-click="set_alphabet(alphabet)">Set Alphabet</button>
+                    <input type="text" ng-model="alphabet" class="form-control" placeholder="Enter Alphabet Splitted By ','">
+                    <div id="alpha_op">
+                        <div></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-info" ng-click="test_word(word);">Test Word</button>
+                    <input type="text" ng-model="word" class="form-control">
+                    <div id="result">
+                        <div></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+        <div class="modal fade" id="edit_state" role="dialog" ng-if="to_edit != {}">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header bg-info text-light">
+                        <div class="modal-title">Edit State : {{to_edit.name}}</div>
+                        <button type="button" class="close" data-dismiss="modal" ng-click="dispose_edit()">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <form role="form">
+
+                            <div class="form-group">
+                                <label class="form-control" for="paths">Add Paths</label>
+                                <br>
+                                <label for="to">To : </label>
+                                <select class="form-control" ng-model="to_select" ng-options="state.name as state.name for state in states">
+                                            <option >Select State</option>
+                                        </select>
+                                <label for="input">Input Symbol</label>
+                                <select class="form-control" ng-model="symbol_select" ng-options="symbol for symbol in symbols">
+                                            <option>
+                                                Select Symbol
+                                            </option>
+                                        </select>
+                                <button class="btn btn-info form-control" ng-click="add_path(to_edit.name,to_select,symbol_select)">Add Path</button>
+                            </div>
+                            <div class="form-group">
+                                <table class="table-bordered col-md-12" ng-if="to_edit.paths.length>0">
+                                    <tr>
+                                        <th>From</th>
+                                        <th>To</th>
+                                        <th>Symbol</th>
+                                        <th></th>
+                                    </tr>
+                                    <tr ng-repeat="path in to_edit.paths">
+                                        <td>{{to_edit.name}}</td>
+                                        <td>{{path.dist.name}}</td>
+                                        <td>{{path.input}}</td>
+                                        <td ng-click="remove_path(to_edit,path)" style="cursor:pointer;"><i class="fas fa-trash-alt"></i></td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-control" for="final">
+                                   <input type="checkbox" name="final" ng-model="to_edit.final">
+                                   Final State</label>
+                            </div>
+
+                            <div class="form-group" ng-if="initial=='' || to_edit.name==initial">
+                                <label class="form-control" for="Initial">
+                                <input type="checkbox" name="initial" ng-model="to_edit.initial">
+                                Initial State</label>
+                            </div>
+                            <button class="btn btn-info form-control" type="submit" ng-click="set_all()">Close</button>
+                        </form>
+                    </div>
+                    <div class="modal-footer" id="edit_state_footer">
+                        <div></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="modal fade" id="view_state" role="dialog" ng-if="to_view != {}">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content" >
+
+                    <div class="modal-header bg-info text-light">
+                        <div class="modal-title">View State : {{to_view.name}}</div>
+                        <button type="button" class="close" data-dismiss="modal" ng-click="dispose_view()">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <form role="form">
+                            <h4>{{to_view.name}}</h4>
+                            <table class="table-bordered">
+                                <tr>
+                                    <th>From</th>
+                                    <th>To</th>
+                                    <th>Symbol</th>
+                                </tr>
+                                <tr ng-repeat="path in to_view.paths">
+                                    <td>{{to_view.name}}</td>
+                                    <td>{{path.dist.name}}</td>
+                                    <td>{{path.input}}</td>
+                                </tr>
+                            </table>
+                            <div class="form-group">
+                                <label class="form-control" for="final">
+                                <input type="checkbox" name="final" ng-model="to_view.final" readonly>
+                                Final State</label>
+                            </div>
+                            <div class="form-group" ng-if="initial=='' || to_view.name==initial">
+                                <label class="form-group" for="Initial">
+                                    <input type="checkbox" name="initial" ng-model="to_view.initial" readonly>
+                                    Initial State</label>
+                            </div>
+                            <button type="submit">Close</button>
+                        </form>
+                    </div>
+                    <div class="modal-footer" id="view_state_footer">
+                        <div></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="modal fade" id="load_file" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <form role="form">
+                            <div class="form-group">
+                                <label for="final">Final State</label>
+                                <input type="file" name="file" accept=".json">
+                            </div>
+                            <button type="submit" class="btn btn-info" ng-click="load()">Load</button>
+                        </form>
+                    </div>
+                    <div class="modal-footer" id="load_footer">
+                        <div></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/angular.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/classes.js"></script>
+    <script src="js/script.js"></script>
+    <script src="js/dom_script.js"></script>
+</body>
+
+</html>
