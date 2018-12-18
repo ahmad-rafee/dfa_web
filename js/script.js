@@ -23,8 +23,14 @@ controllers.app_controller = ($scope) => {
     $scope.initial = "";
     // [0, 1, 2].map(i => $scope.states.push(new State("q" + i)));
     //$scope.load_filename = "";
-    $scope.dispose_edit = ()=>$scope.to_edit={};
-    $scope.dispose_view = ()=>$scope.to_view={};
+    $scope.dispose_edit = () => {
+        $("#edit_state").modal('hide');
+        $scope.to_edit = {};
+    }
+    $scope.dispose_view = () => {
+        $("#view_state").modal('hide');
+        $scope.to_view = {};
+    }
     $scope.new_set = () => {
         $("input").val("");
         $("#result>div").replaceWith("<div></div>");
@@ -73,12 +79,13 @@ controllers.app_controller = ($scope) => {
             //nothing to do
         }
         $scope.states[$scope.states.indexOf($scope.to_edit)].initial = $scope.to_edit.initial;
+        $scope.dispose_edit();
     }
     $scope.remove_path = (state, path) => {
         con = confirm("Are you sure to remove the path ?");
-        if(con){
-        index = state.paths.indexOf(path);
-        state.paths.splice(index, 1);
+        if (con) {
+            index = state.paths.indexOf(path);
+            state.paths.splice(index, 1);
         }
     };
     $scope.view_details = (state_name) => {
@@ -198,8 +205,8 @@ controllers.app_controller = ($scope) => {
         file_reader.readAsText(file_name);
     }
     $scope.save = () => {
-        if($scope.states.length>0)
-        download("DFA.json", JSON.stringify({ states: $scope.states, symbols: $scope.symbols, DFA: "dfa_web" }));
+        if ($scope.states.length > 0)
+            download("DFA.json", JSON.stringify({ states: $scope.states, symbols: $scope.symbols, DFA: "dfa_web" }));
     }
 
 };
