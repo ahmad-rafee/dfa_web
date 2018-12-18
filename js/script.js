@@ -174,8 +174,8 @@ controllers.app_controller = ($scope) => {
         $("#result>div").slideDown();
     }
     $scope.load = () => {
-        $scope.new_set();
         var file_name = $("input[type=file]")[0].files[0];
+        $scope.new_set();
         var file_reader = new FileReader();
         file_reader.onloadend = function (e) {
             data = JSON.parse(e.target.result);
