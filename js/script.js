@@ -1,15 +1,4 @@
 var app = angular.module('dfa_web', []);
-app.directive("selectNgFiles", function () {
-    return {
-        require: "ngModel",
-        link: function postLink(scope, elem, attrs, ngModel) {
-            elem.on("change", function (e) {
-                var files = elem[0].files;
-                ngModel.$setViewValue(files);
-            })
-        }
-    }
-});
 controllers = {};
 controllers.app_controller = ($scope) => {
     var alert1 = "<div class='alert alert-success' style='display:none;'><strong>";
@@ -19,10 +8,7 @@ controllers.app_controller = ($scope) => {
     $scope.symbols = [];
     $scope.to_edit = {};
     $scope.to_view = {};
-    // $scope.symbols = ['a', 'b', 'c'];
     $scope.initial = "";
-    // [0, 1, 2].map(i => $scope.states.push(new State("q" + i)));
-    //$scope.load_filename = "";
     $scope.dispose_edit = () => {
         $("#edit_state").modal('hide');
         $scope.to_edit = {};

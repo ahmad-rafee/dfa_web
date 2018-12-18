@@ -38,9 +38,6 @@ class State{
     set_final(){
         this.final = true;
     }
-    unset_final(){
-        this.final = false;
-    }
     set_init(init){
         this.initial = init;
     }
