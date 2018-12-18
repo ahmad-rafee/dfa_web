@@ -4,8 +4,8 @@
 ```
 You must install nodejs ro run the project
 ```
+# nodejs commands
 ```
-nodejs commands
 npm install
 npm start
 ```
